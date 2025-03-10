@@ -16,8 +16,6 @@ namespace MyConsoleApp
                     TimeSpan.FromMinutes(5),
                     "MyPayload");
 
-            Console.WriteLine($"Sas Url: {sasUrl}");
-
             // Simulate an HttpRequest coming in to some API endpoint
             var request = CreateHttpRequestFromUrl(sasUrl);
 
@@ -27,6 +25,7 @@ namespace MyConsoleApp
             PrintSasUrlComponents(sasLinkComponents);
 
             // Optional check on permissions to demonstrate bit shifting
+            Console.WriteLine("Permissions Checking:");
             Console.WriteLine($"Permissions Binary: {ConvertToBinaryString(sasLinkComponents.Permissions)}");
             Console.WriteLine($"Has Read Permission Binary: {ConvertToBinaryString(sasLinkComponents.Permissions & (int)SasPermissions.Read)}");
             var hasReadPermissions = HasPermission(sasLinkComponents.Permissions, SasPermissions.Read);
@@ -37,6 +36,7 @@ namespace MyConsoleApp
             Console.WriteLine($"Has Read and Write permissions Binary: {ConvertToBinaryString((int)(SasPermissions.Read | SasPermissions.Write))}");
             var hasReadWritePermissions = HasPermission(sasLinkComponents.Permissions, SasPermissions.Read | SasPermissions.Write);
             Console.WriteLine($"Has Read and Write Permissions: {hasReadWritePermissions}");
+            Console.WriteLine("****************************************");
 
 
             // Validate the Url
@@ -46,6 +46,8 @@ namespace MyConsoleApp
                 (SasPermissions)sasLinkComponents.Permissions,
                 sasLinkComponents.Payload);
 
+            Console.WriteLine("Validation Checks:");
+            Console.WriteLine($"Valid Sas Url: {sasUrl}");
             Console.WriteLine($"Is valid: {isValid}");
 
             // Alter the Url so the payload is different and thus invalid
@@ -116,10 +118,12 @@ namespace MyConsoleApp
 
         private static void PrintSasUrlComponents(SasLinkComponents sasLinkComponents)
         {
+            Console.WriteLine("SAS Url Components:");
             Console.WriteLine($"Url: {sasLinkComponents.Url}");
             Console.WriteLine($"Payload: {sasLinkComponents.Payload}");
             Console.WriteLine($"Expiration: {sasLinkComponents.Expiration}");
             Console.WriteLine($"Permissions: {GetSasPermissionsString(sasLinkComponents.Permissions)}");
+            Console.WriteLine("****************************************");
         }
 
         private static string ConvertToBinaryString(int number)
